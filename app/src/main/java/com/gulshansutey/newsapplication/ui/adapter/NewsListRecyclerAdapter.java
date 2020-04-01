@@ -12,7 +12,8 @@ import com.gulshansutey.newsapplication.ui.adapter.viewholder.NewsAdapterViewHol
 public class NewsListRecyclerAdapter extends ListAdapter<News, RecyclerView.ViewHolder> {
 
 
-    private OnItemTouchEvenListener  onItemTouchEvenListener;
+    private OnItemTouchEvenListener onItemTouchEvenListener;
+
     public NewsListRecyclerAdapter() {
         super(News.DIFF_CALLBACK);
     }
@@ -20,20 +21,25 @@ public class NewsListRecyclerAdapter extends ListAdapter<News, RecyclerView.View
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return NewsAdapterViewHolder.create(parent,onItemTouchEvenListener);
+        return NewsAdapterViewHolder.create(parent, onItemTouchEvenListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         News aNews = getItem(position);
         if (aNews != null) {
-            ((NewsAdapterViewHolder)holder).bindViews(aNews);
+            try {
+                ((NewsAdapterViewHolder) holder).bindViews(aNews);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public interface OnItemTouchEvenListener{
+    public interface OnItemTouchEvenListener {
         void onItemClick(int position);
-        void onItemBookmark(int position,boolean check);
+
+        void onItemBookmark(int position, boolean check);
     }
 
 

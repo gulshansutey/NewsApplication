@@ -1,31 +1,37 @@
 package com.gulshansutey.newsapplication.utils;
 
-import android.net.ParseException;
-import android.text.format.DateUtils;
-
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import java.util.Date;
 
 public class DateFormatUtils {
 
 
-    public static String formatDate(String date) {
-        // 2020-02-10T17:06:42Z
-        CharSequence timeAgo = "";
-        if (date == null) return timeAgo.toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-        try {
-            long time = sdf.parse("2016-01-24T16:00:00.000Z").getTime();
-            long now = System.currentTimeMillis();
-            timeAgo =
-                    DateUtils.getRelativeTimeSpanString(time, now, DateUtils.MINUTE_IN_MILLIS);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (java.text.ParseException e) {
-            e.printStackTrace();
-        }
-        return "\u2022 "+timeAgo.toString();
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+
+
+
+    public static String formatDate(String time) throws Exception{
+        if (time == null) return "";
+            long timeCurrent = dateToMilli(time);
+            DateFormat dateFormat = new SimpleDateFormat("MMM dd - HH:mm a");
+            Date date = new Date();
+            date.setTime(timeCurrent);
+        return dateFormat.format(date);
     }
+
+    public static long dateToMilli(String time) throws Exception {
+        if (time==null)return 0;
+
+        DateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        String dateString = time.replace("Z", "GMT+00:00");
+        sdf.parse(dateString);
+        return sdf.getCalendar().getTimeInMillis();
+    }
+
+
+
+
+
 
 }

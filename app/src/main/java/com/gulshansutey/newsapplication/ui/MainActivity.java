@@ -1,18 +1,30 @@
 package com.gulshansutey.newsapplication.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gulshansutey.newsapplication.R;
+import com.gulshansutey.newsapplication.model.News;
 import com.gulshansutey.newsapplication.model.NewsResponse;
 import com.gulshansutey.newsapplication.networking.RestClient;
 import com.gulshansutey.newsapplication.ui.adapter.NewsListRecyclerAdapter;
+import com.gulshansutey.newsapplication.utils.NewsFilterUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.gulshansutey.newsapplication.ui.actions.SortingActionProvider.SORT_BY_LATEST;
+import static com.gulshansutey.newsapplication.ui.actions.SortingActionProvider.SORT_BY_OLDEST;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private final int NEWS_API_REQUEST_CODE = 10;
     private final String NEWS_URL = "https://candidate-test-data-moengage.s3.amazonaws.com/Android/news-api-feed/staticResponse.json";
-
+    private RecyclerView rv_news_list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +46,50 @@ public class MainActivity extends AppCompatActivity {
         }
 
         listRecyclerAdapter = new NewsListRecyclerAdapter();
-        RecyclerView rv_news_list = findViewById(R.id.rv_news_list);
+          rv_news_list = findViewById(R.id.rv_news_list);
         rv_news_list.setLayoutManager(new LinearLayoutManager(this));
         rv_news_list.setAdapter(listRecyclerAdapter);
         getNewsFromUrl();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+         getMenuInflater().inflate(R.menu.main_screen_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getTitle().toString()){
+            case SORT_BY_LATEST:
+                resetAdapterData(true);
+                break;
+            case SORT_BY_OLDEST:
+                resetAdapterData(false);
+                break;
+        }
+
+        return true;
+    }
+
+    private void resetAdapterData(final boolean b){
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                List<News>  newsList = new ArrayList<>(listRecyclerAdapter.getCurrentList());
+                listRecyclerAdapter.submitList(null);
+                NewsFilterUtils.sortDataByDate(newsList,b);
+
+                listRecyclerAdapter.submitList(newsList);
+                //listRecyclerAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+
 
     private void getNewsFromUrl(){
 
@@ -52,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
              public void onSuccess(NewsResponse o, int code) {
                  if (o!=null)
                  listRecyclerAdapter.submitList(o.getArticles());
+
              }
 
              @Override
