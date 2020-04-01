@@ -3,6 +3,7 @@ package com.gulshansutey.newsapplication.networking;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.webkit.URLUtil;
 
 import com.google.gson.Gson;
@@ -11,19 +12,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
 /** RestClient */
-public final class RestClient <T>{
+public final class RestClient<T>{
 
 
     private final String TAG = RestClient.class.getName();
     private int requestCode;
     private String url = null;
     private String method = METHOD.GET.name;
-
 
     /**
      * set url
@@ -55,8 +56,8 @@ public final class RestClient <T>{
      * @param callback response callbacks,
      * @param type     Object type
      */
-    public void execute(final Class<T> type,final Callback<T> callback) {
-
+    public void execute(final Class<T> type, final Callback callback) {
+        callback.onProgressChange(View.VISIBLE);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -67,19 +68,23 @@ public final class RestClient <T>{
                         @Override
                         public void run() {
                             Log.v(TAG,"Response - "+s);
-
-                            callback.onSuccess(new Gson().fromJson(s, type), requestCode);
+                            Type type1 = callback.getClass().getGenericSuperclass();
+                            callback.onProgressChange(View.GONE);
+                            callback.onSuccess(new Gson().fromJson(s,type), requestCode);
                         }
                     });
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    callback.onProgressChange(View.GONE);
                     callback.onFailure(new Throwable(e.getLocalizedMessage()), requestCode);
                 }
             }
         };
+
         Thread thread = new Thread(runnable);
         thread.start();
+
     }
 
     /**
@@ -143,26 +148,25 @@ public final class RestClient <T>{
     }
 
     public enum METHOD {
-        POST("POST"),
         GET("GET");
 
         private final String name;
-
         METHOD(String s) {
             name = s;
         }
 
     }
 
-
     /**
      * Callbacks for the client response
      */
-    public interface Callback<T> {
-        void onSuccess(T t, int code);
+    public  interface Callback<T> {
 
-        void onFailure(Throwable throwable, int code);
+         void onSuccess(T t, int code);
+         void onProgressChange(int visibility);
+         void onFailure(Throwable throwable, int code);
     }
+
 
 }
 

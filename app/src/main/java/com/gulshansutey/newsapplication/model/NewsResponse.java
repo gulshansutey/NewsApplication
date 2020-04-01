@@ -3,8 +3,8 @@ package com.gulshansutey.newsapplication.model;
 import java.util.List;
 
 public class NewsResponse {
-    private String status;
 
+    private String status;
     private List<News> articles;
 
     public String getStatus() {
@@ -22,4 +22,5 @@ public class NewsResponse {
     public void setArticles(List<News> articles) {
         this.articles = articles;
     }
+
 }

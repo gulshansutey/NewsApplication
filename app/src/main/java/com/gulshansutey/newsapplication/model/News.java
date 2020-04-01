@@ -1,5 +1,8 @@
 package com.gulshansutey.newsapplication.model;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+
 public class News {
 
     private String author;
@@ -9,6 +12,17 @@ public class News {
     private String urlToImage;
     private String url;
     private String publishedAt;
+    public static final DiffUtil.ItemCallback<News> DIFF_CALLBACK = new DiffUtil.ItemCallback<News>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull News oldItem, @NonNull News newItem) {
+            return oldItem.getTitle().equalsIgnoreCase(newItem.getTitle());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull News oldItem, @NonNull News newItem) {
+             return oldItem.getDescription().equalsIgnoreCase(newItem.getDescription());
+        }
+    };
 
     public String getAuthor() {
         return author;
@@ -65,9 +79,17 @@ public class News {
     public void setSource(Source source) {
         this.source = source;
     }
+    private boolean isBookmarked;
 
+    public boolean isBookmarked() {
+        return isBookmarked;
+    }
 
-    class Source {
+    public void setBookmarked(boolean bookmarked) {
+        isBookmarked = bookmarked;
+    }
+
+    public class Source {
         private String id;
         private String name;
 
@@ -87,5 +109,6 @@ public class News {
             this.id = id;
         }
     }
+
 
 }
