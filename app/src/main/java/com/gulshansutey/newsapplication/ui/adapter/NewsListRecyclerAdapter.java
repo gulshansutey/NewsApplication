@@ -36,6 +36,10 @@ public class NewsListRecyclerAdapter extends ListAdapter<News, RecyclerView.View
         }
     }
 
+    public void setOnItemTouchEvenListener(OnItemTouchEvenListener onItemTouchEvenListener) {
+        this.onItemTouchEvenListener = onItemTouchEvenListener;
+    }
+
     public interface OnItemTouchEvenListener {
         void onItemClick(int position);
 

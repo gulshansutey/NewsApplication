@@ -73,7 +73,7 @@ public class NewsAdapterViewHolder extends RecyclerView.ViewHolder {
         tv_title.setText(news.getTitle());
         tv_source.setText(news.getSource().getName());
         tv_title.setText(news.getTitle());
-        tv_time.setText(String.format("• %s", DateFormatUtils.formatDate(news.getPublishedAt())));
+        tv_time.setText(String.format("• %s", DateFormatUtils.simplifyDate(news.getPublishedAt())));
         Glide.with(context)
                 .load(news.getUrlToImage())
                 .placeholder(R.drawable.ic_launcher_background).into(iv_banner);
