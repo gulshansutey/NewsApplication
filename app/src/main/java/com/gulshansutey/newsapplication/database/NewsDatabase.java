@@ -6,15 +6,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class NewsDatabase extends SQLiteOpenHelper {
+import com.gulshansutey.newsapplication.database.tables.NewsTable;
 
-    public NewsDatabase(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        super(context, name, factory, version);
+public final class NewsDatabase extends SQLiteOpenHelper {
+
+    public NewsDatabase(@Nullable Context context, @Nullable String name, int version) {
+        super(context, name, null, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        NewsTable.createTable(db);
     }
 
     @Override

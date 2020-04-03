@@ -89,7 +89,7 @@ public class News {
         isBookmarked = bookmarked;
     }
 
-    public class Source {
+    public static class Source {
         private String id;
         private String name;
 

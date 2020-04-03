@@ -1,11 +1,11 @@
 package com.gulshansutey.newsapplication.model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class NewsResponse {
 
     private String status;
-    private List<News> articles;
+    private ArrayList<News> articles;
 
     public String getStatus() {
         return status;
@@ -15,11 +15,11 @@ public class NewsResponse {
         this.status = status;
     }
 
-    public List<News> getArticles() {
+    public ArrayList<News> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<News> articles) {
+    public void setArticles(ArrayList<News> articles) {
         this.articles = articles;
     }
 

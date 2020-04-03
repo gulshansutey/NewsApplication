@@ -58,16 +58,11 @@ public class NewsAdapterViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        cb_bookmark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (onItemTouchEvenListener != null)
-                    onItemTouchEvenListener.onItemBookmark(getAdapterPosition(), isChecked);
-            }
-        });
+
     }
 
     public void bindViews(final News news) throws Exception {
+        cb_bookmark.setOnCheckedChangeListener(null);
         cb_bookmark.setChecked(news.isBookmarked());
         tv_description.setText(news.getDescription());
         tv_title.setText(news.getTitle());
@@ -77,5 +72,12 @@ public class NewsAdapterViewHolder extends RecyclerView.ViewHolder {
         Glide.with(context)
                 .load(news.getUrlToImage())
                 .placeholder(R.drawable.ic_launcher_background).into(iv_banner);
+        cb_bookmark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (onItemTouchEvenListener != null)
+                    onItemTouchEvenListener.onItemBookmark(getAdapterPosition(), isChecked);
+            }
+        });
     }
 }

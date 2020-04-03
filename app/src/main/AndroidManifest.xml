@@ -3,15 +3,18 @@
     package="com.gulshansutey.newsapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
+        android:name=".NewsApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_news_launcher_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_news_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.NewsReadActivity"></activity>
+        <activity android:name=".ui.NewsReadActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait">

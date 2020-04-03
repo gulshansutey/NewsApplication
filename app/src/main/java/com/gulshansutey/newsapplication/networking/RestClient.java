@@ -12,7 +12,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -56,6 +55,7 @@ public final class RestClient<T>{
      * @param callback response callbacks,
      * @param type     Object type
      */
+
     public void execute(final Class<T> type, final Callback callback) {
         callback.onProgressChange(View.VISIBLE);
         Runnable runnable = new Runnable() {
@@ -68,23 +68,28 @@ public final class RestClient<T>{
                         @Override
                         public void run() {
                             Log.v(TAG,"Response - "+s);
-                            Type type1 = callback.getClass().getGenericSuperclass();
                             callback.onProgressChange(View.GONE);
                             callback.onSuccess(new Gson().fromJson(s,type), requestCode);
                         }
                     });
 
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
-                    callback.onProgressChange(View.GONE);
-                    callback.onFailure(new Throwable(e.getLocalizedMessage()), requestCode);
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onProgressChange(View.GONE);
+                            callback.onFailure(new Throwable(e.getLocalizedMessage()), requestCode);
+                        }
+                    });
+
                 }
             }
         };
 
         Thread thread = new Thread(runnable);
         thread.start();
-
     }
 
     /**

@@ -9,4 +9,8 @@
             app:actionProviderClass="com.gulshansutey.newsapplication.ui.actions.SortingActionProvider"
             app:showAsAction="always" />
 
+        <item android:id="@+id/menu_filter"
+            android:icon="@drawable/ic_filter_list_white_24dp"
+            android:title="Filter"
+            app:showAsAction="always"/>
 </menu>
